@@ -1,79 +1,41 @@
 package com.meowu.mybatis.plugin.mysql.core.criteria;
 
-import com.meowu.commons.utils.ReflectionUtils;
+import com.meowu.mybatis.plugin.commons.core.expression.Expression;
 import com.meowu.mybatis.plugin.mysql.core.expression.*;
 
 import java.util.function.Function;
 
 public class Restrictions{
 
-    public static Equal equal(Function function){
-        Equal equal = new Equal();
-        equal.setField(ReflectionUtils.getFieldName(function));
-        return equal;
+    private Restrictions(){
+        throw new IllegalStateException("Instantiation is not allowed");
     }
 
-    public static LessThan lessThan(Function function){
-        LessThan lessThan = new LessThan();
-        lessThan.setField(ReflectionUtils.getFieldName(function));
-        return lessThan;
+    public static Expression equal(Function function){
+        return new Equal(function);
     }
 
-    public static LessThanAndEqual lessThanAndEqual(Function function){
-        LessThanAndEqual lessThanAndEqual = new LessThanAndEqual();
-        lessThanAndEqual.setField(ReflectionUtils.getFieldName(function));
-        return lessThanAndEqual;
+    public static Expression like(Function function){
+         return new Like(function);
     }
 
-    public static GreaterThan greaterThan(Function function){
-        GreaterThan greaterThan = new GreaterThan();
-        greaterThan.setField(ReflectionUtils.getFieldName(function));
-        return greaterThan;
+    public static Expression less(Function function){
+        return new Less(function);
     }
 
-    public static GreaterThanAndEqual greaterThanAndEqual(Function function){
-        GreaterThanAndEqual greaterThanAndEqual = new GreaterThanAndEqual();
-        greaterThanAndEqual.setField(ReflectionUtils.getFieldName(function));
-        return greaterThanAndEqual;
+    public static Expression lessEqual(Function function){
+        return new LessEqual(function);
     }
 
-    public static IsNull isNull(Function function){
-        IsNull isNull = new IsNull();
-        isNull.setField(ReflectionUtils.getFieldName(function));
-        return isNull;
+    public static Expression between(Function function){
+        return new Between(function);
     }
 
-    public static Between between(Function function){
-        Between between = new Between();
-        between.setField(ReflectionUtils.getFieldName(function));
-        return between;
+    public static Expression in(Function function){
+        return new In(function);
     }
 
-    public static In in(Function function){
-        In in = new In();
-        in.setField(ReflectionUtils.getFieldName(function));
-        return in;
-    }
-
-    public static Count count(){
-        Count count = new Count();
-        count.setField("*");
-        return count;
-    }
-
-    public static Count count(Function function){
-        Count count = new Count();
-        count.setField(ReflectionUtils.getFieldName(function));
-        return count;
-    }
-
-    public static And and(){
-        And and = new And();
-        return and;
-    }
-
-    public static Or or(){
-        Or or = new Or();
-        return or;
+    public static Expression isNull(Function function){
+        return new IsNull(function);
     }
 }

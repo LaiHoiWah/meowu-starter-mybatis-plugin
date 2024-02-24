@@ -1,25 +1,30 @@
 package com.meowu.mybatis.plugin.mysql.core.expression;
 
 import com.meowu.commons.utils.AssertionUtils;
-import com.meowu.mybatis.plugin.commons.core.constants.ExpressionType;
-import com.meowu.mybatis.plugin.commons.core.constants.ValueType;
-import com.meowu.mybatis.plugin.commons.core.expression.Expression;
-import com.meowu.mybatis.plugin.mysql.core.constants.Operator;
+import com.meowu.commons.utils.ReflectionUtils;
+import com.meowu.mybatis.plugin.commons.core.constants.Constant;
+import com.meowu.mybatis.plugin.commons.core.expression.Operator;
 
-public class Equal extends Expression{
+import java.util.function.Function;
 
-    public Equal(){
-        super(Operator.EQ, ExpressionType.OPERATION, ValueType.SINGLE);
+public class Equal extends Operator<Object>{
+
+    public Equal(Function function){
+        AssertionUtils.isNotNull(function, "Getter function must not be null");
+
+        super.setField(ReflectionUtils.getFieldName(function));
+        super.setOperator(Constant.OPERATOR_EQUAL);
+        super.setValueType(Constant.VALUE_TYPE_SINGLE);
     }
 
     public Equal not(){
-        setOperator(Operator.NEQ);
+        super.setOperator(Constant.OPERATOR_NOT_EQUAL);
         return this;
     }
 
     public void value(Object value){
         AssertionUtils.isNotNull(value, "Value must not be null");
 
-        setValue(value);
+        super.setValue(value);
     }
 }

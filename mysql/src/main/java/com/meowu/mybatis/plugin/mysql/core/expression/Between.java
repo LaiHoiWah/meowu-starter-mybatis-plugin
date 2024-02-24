@@ -2,26 +2,32 @@ package com.meowu.mybatis.plugin.mysql.core.expression;
 
 import com.google.common.collect.Lists;
 import com.meowu.commons.utils.AssertionUtils;
-import com.meowu.mybatis.plugin.commons.core.constants.ExpressionType;
-import com.meowu.mybatis.plugin.commons.core.constants.ValueType;
-import com.meowu.mybatis.plugin.commons.core.expression.Expression;
-import com.meowu.mybatis.plugin.mysql.core.constants.Operator;
+import com.meowu.commons.utils.ReflectionUtils;
+import com.meowu.mybatis.plugin.commons.core.constants.Constant;
+import com.meowu.mybatis.plugin.commons.core.expression.Functional;
 
-public class Between extends Expression{
+import java.util.List;
+import java.util.function.Function;
 
-    public Between(){
-        super(Operator.BETWEEN, ExpressionType.FUNCTION, ValueType.MULTIPLE);
+public class Between extends Functional<List>{
+
+    public Between(Function function){
+        AssertionUtils.isNotNull(function, "Getter function must not be null");
+
+        super.setField(ReflectionUtils.getFieldName(function));
+        super.setOperator(Constant.OPERATOR_BETWEEN);
+        super.setValueType(Constant.VALUE_TYPE_MULTI);
     }
 
     public Between not(){
-        setOperator(Operator.NOT_BETWEEN);
+        super.setOperator(Constant.OPERATOR_NOT_BETWEEN);
         return this;
     }
 
-    public void value(Object minimum, Object maximum){
-        AssertionUtils.isNotNull(minimum, "Minimum value must not be null");
-        AssertionUtils.isNotNull(maximum, "Maximum value must not be null");
+    public void value(Object min, Object max){
+        AssertionUtils.isNotNull(min, "Value must not be null");
+        AssertionUtils.isNotNull(max, "Value must not be null");
 
-        setValue(Lists.newArrayList(minimum, maximum));
+        super.setValue(Lists.newArrayList(min, max));
     }
 }
